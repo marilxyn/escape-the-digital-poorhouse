@@ -7,6 +7,7 @@ import MapScreen from "./screens/MapScreen";
 import HousingOffice from "./screens/HousingOffice";
 import FoodOffice from "./screens/FoodOffice";
 import FlaggedScreen from "./screens/FlaggedScreen";
+import GlitchScreen from "./screens/GlitchScreen";
 import EndingScreen from "./screens/EndingScreen";
 import RevealDashboard from "./screens/RevealDashboard";
 import "./App.css";
@@ -17,6 +18,7 @@ const SCREENS = {
   housing: HousingOffice,
   food: FoodOffice,
   flagged: FlaggedScreen,
+  glitch: GlitchScreen,
   ending: EndingScreen,
   reveal: RevealDashboard,
 };
@@ -25,7 +27,7 @@ function GameShell() {
   const { state } = useGame();
   const Screen = SCREENS[state.screen] ?? MapScreen;
   const mood = Math.min(1, state.riskScore / (FLAG_THRESHOLD * 2));
-  const showStats = state.screen !== "intro" && state.screen !== "reveal";
+  const showStats = !["intro", "reveal", "glitch"].includes(state.screen);
 
   return (
     <div className="game-shell" style={{ "--mood": mood }}>

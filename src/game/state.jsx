@@ -6,6 +6,7 @@ import { resolveEnding } from "./endings";
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 export const RENT_DUE_DAY = 6;
 export const DAILY_COST_OF_LIVING = 15;
+export const REVEAL_AFTER_VISITS = 2;
 
 export function timeLabel(day) {
   return `${WEEKDAYS[(day - 1) % 7]}, Day ${day}`;
@@ -19,6 +20,9 @@ const initialState = {
   stress: 30,
   housingStability: "at-risk",
   riskScore: 0,
+  revealed: false,
+  visitCount: 0,
+  lastAction: null,
   truth: { receivedUnemployment: false },
   flags: {
     housingSubmitted: false,
@@ -45,8 +49,15 @@ function checkFlagEvent(state) {
   return state;
 }
 
+function checkReveal(state) {
+  if (!state.revealed && state.visitCount >= REVEAL_AFTER_VISITS) {
+    return { ...state, revealed: true, screen: "glitch" };
+  }
+  return state;
+}
+
 function checkRentDue(state) {
-  if (state.day >= RENT_DUE_DAY && state.screen !== "flagged") {
+  if (state.day >= RENT_DUE_DAY && state.screen !== "flagged" && state.screen !== "glitch") {
     return { ...state, ending: resolveEnding(state), screen: "ending" };
   }
   return state;
@@ -55,6 +66,8 @@ function checkRentDue(state) {
 function settle(state) {
   let next = checkFlagEvent(state);
   if (next.screen === "flagged") return next;
+  next = checkReveal(next);
+  if (next.screen === "glitch") return next;
   return checkRentDue(next);
 }
 
@@ -72,6 +85,9 @@ function reducer(state, action) {
     case "ACK_FLAGGED":
       return settle({ ...state, screen: "map" });
 
+    case "ACK_GLITCH":
+      return settle({ ...state, screen: "map" });
+
     case "PASS_DAY":
       return settle(advanceDay({ ...state, banner: null }));
 
@@ -80,6 +96,8 @@ function reducer(state, action) {
         ...state,
         flags: { ...state.flags, housingSubmitted: true, housingAnswer: action.answer },
         housingStability: "pending",
+        visitCount: state.visitCount + 1,
+        lastAction: { building: "housing", ts: Date.now() },
       };
       const liedAboutUnemployment =
         action.answer === "yes" && !state.truth.receivedUnemployment;
@@ -99,7 +117,12 @@ function reducer(state, action) {
     case "FOOD_SUBMIT": {
       const attempts = state.flags.foodAttempts + 1;
       const correct = isCorrectSelection(action.selectedIds);
-      let next = { ...state, flags: { ...state.flags, foodAttempts: attempts } };
+      let next = {
+        ...state,
+        flags: { ...state.flags, foodAttempts: attempts },
+        visitCount: state.visitCount + 1,
+        lastAction: { building: "food", ts: Date.now() },
+      };
 
       if (correct) {
         next.flags.foodApproved = true;

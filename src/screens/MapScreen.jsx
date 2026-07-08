@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useGame } from "../game/state";
+import NetworkMap from "../components/NetworkMap";
 
 const BUILDINGS = [
   { id: "hospital", label: "Hospital", area: "hospital", active: false },
@@ -15,7 +16,7 @@ export default function MapScreen() {
 
   return (
     <motion.div
-      className="screen map-screen case-corners"
+      className={`screen map-screen case-corners ${state.revealed ? "map-screen-revealed" : ""}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -27,21 +28,29 @@ export default function MapScreen() {
         </div>
       )}
 
-      <p className="map-hint">Rent is due at the start of Day {6}. Choose where to go.</p>
+      <p className="map-hint">
+        {state.revealed
+          ? "Live feed: Citizen Record #4471-B. Every office reports to the same database."
+          : "Rent is due at the start of Day 6. Choose where to go."}
+      </p>
 
-      <div className="city-map">
-        {BUILDINGS.map((b) => (
-          <button
-            key={b.id}
-            className={`building building-${b.area} ${b.active ? "building-active" : "building-disabled"}`}
-            disabled={!b.active}
-            onClick={() => b.active && dispatch({ type: "VISIT", building: b.id })}
-          >
-            {b.label}
-            {!b.active && <span className="building-note">Not yet open</span>}
-          </button>
-        ))}
-      </div>
+      {state.revealed ? (
+        <NetworkMap />
+      ) : (
+        <div className="city-map">
+          {BUILDINGS.map((b) => (
+            <button
+              key={b.id}
+              className={`building building-${b.area} ${b.active ? "building-active" : "building-disabled"}`}
+              disabled={!b.active}
+              onClick={() => b.active && dispatch({ type: "VISIT", building: b.id })}
+            >
+              {b.label}
+              {!b.active && <span className="building-note">Not yet open</span>}
+            </button>
+          ))}
+        </div>
+      )}
 
       <button className="btn btn-secondary" onClick={() => dispatch({ type: "PASS_DAY" })}>
         Wait for tomorrow
