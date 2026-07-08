@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useGame } from "../game/state";
+import { useGame, RENT_DUE_DAY } from "../game/state";
 import NetworkMap from "../components/NetworkMap";
 
 const BUILDINGS = [
@@ -31,7 +31,7 @@ export default function MapScreen() {
       <p className="map-hint">
         {state.revealed
           ? "Live feed: Citizen Record #4471-B. Every office reports to the same database."
-          : "Rent is due at the start of Day 8. Choose where to go."}
+          : `Rent is due at the start of Day ${RENT_DUE_DAY}. Choose where to go.`}
       </p>
 
       {state.revealed ? (
