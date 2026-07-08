@@ -1,0 +1,33 @@
+:root {
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+  font: 17px/145% var(--sans);
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  margin: 0 0 12px;
+}
+
+p {
+  margin: 0 0 10px;
+}
+
+button {
+  font: inherit;
+}
