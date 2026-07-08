@@ -6,7 +6,7 @@ import { resolveEnding } from "./endings";
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 export const RENT_DUE_DAY = 8;
 export const DAILY_COST_OF_LIVING = 15;
-export const REVEAL_DAY = 4;
+export const REVEAL_DAY = RENT_DUE_DAY - 1;
 
 export function timeLabel(day) {
   return `${WEEKDAYS[(day - 1) % 7]}, Day ${day}`;
