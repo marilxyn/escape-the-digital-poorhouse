@@ -13,36 +13,38 @@ export function timeLabel(day) {
   return `${WEEKDAYS[(day - 1) % 7]}, Day ${day}`;
 }
 
-const initialState = {
-  screen: "intro",
-  day: 1,
-  money: 185,
-  food: 60,
-  health: 100,
-  stress: 30,
-  housingStability: "at-risk",
-  riskScore: 0,
-  revealed: false,
-  lastAction: null,
-  truth: { receivedUnemployment: false },
-  flags: {
-    housingSubmitted: false,
-    housingAnswer: null,
-    foodApproved: false,
-    foodAttempts: 0,
-    flaggedShown: false,
-    employmentApplications: 0,
-    postingType: null,
-    interviewPending: false,
-    interviewResolved: false,
-    jobSecured: false,
-    injuryOccurred: false,
-    injuryDebt: 0,
-  },
-  log: [],
-  banner: null,
-  ending: null,
-};
+function createInitialState() {
+  return {
+    screen: "intro",
+    day: 1,
+    money: 185,
+    food: 60,
+    health: 100,
+    stress: 30,
+    housingStability: "at-risk",
+    riskScore: 0,
+    revealed: false,
+    lastAction: null,
+    truth: { receivedUnemployment: false },
+    flags: {
+      housingSubmitted: false,
+      housingAnswer: null,
+      foodApproved: false,
+      foodAttempts: 0,
+      flaggedShown: false,
+      employmentApplications: 0,
+      postingType: null,
+      interviewPending: false,
+      interviewResolved: false,
+      jobSecured: false,
+      injuryOccurred: false,
+      injuryDebt: 0,
+    },
+    log: [],
+    banner: null,
+    ending: null,
+  };
+}
 
 function advanceDay(state) {
   let next = { ...state, day: state.day + 1 };
@@ -84,6 +86,7 @@ function settle(state) {
 }
 
 function reducer(state, action) {
+  if (action.type === "RESTART") return createInitialState();
   if (state.screen === "ending" && action.type !== "CONTINUE_FROM_ENDING") return state;
   if (state.screen === "reveal") return state;
 
@@ -254,7 +257,7 @@ function reducer(state, action) {
 const GameContext = createContext(null);
 
 export function GameProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, null, createInitialState);
   return <GameContext.Provider value={{ state, dispatch }}>{children}</GameContext.Provider>;
 }
 

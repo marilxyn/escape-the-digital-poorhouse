@@ -3,7 +3,7 @@ import { useGame } from "../game/state";
 import SystemDocs from "../components/SystemDocs";
 
 export default function RevealDashboard() {
-  const { state } = useGame();
+  const { state, dispatch } = useGame();
 
   const grouped = state.log.reduce((acc, entry) => {
     acc[entry.reason] = (acc[entry.reason] || 0) + entry.amount;
@@ -39,6 +39,10 @@ export default function RevealDashboard() {
         None of these looked bad on their own. Together, they were the whole decision — made by
         a system no office ever admitted was watching.
       </p>
+
+      <button className="btn btn-primary" onClick={() => dispatch({ type: "RESTART" })}>
+        Play Again
+      </button>
 
       <SystemDocs />
     </motion.div>
