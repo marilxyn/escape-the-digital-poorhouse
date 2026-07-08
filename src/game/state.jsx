@@ -17,6 +17,7 @@ const initialState = {
   day: 1,
   money: 185,
   food: 60,
+  health: 100,
   stress: 30,
   housingStability: "at-risk",
   riskScore: 0,
@@ -33,6 +34,7 @@ const initialState = {
     interviewPending: false,
     interviewResolved: false,
     jobSecured: false,
+    erVisits: 0,
   },
   log: [],
   banner: null,
@@ -205,6 +207,51 @@ function reducer(state, action) {
           body: "You kept your benefits appointment instead. The employer filled the position with someone who showed up.",
         };
       }
+
+      next = advanceDay(next);
+      next.screen = "map";
+      return settle(next);
+    }
+
+    case "HOSPITAL_ER": {
+      const erVisits = state.flags.erVisits + 1;
+      let next = {
+        ...state,
+        flags: { ...state.flags, erVisits },
+        money: Math.max(0, state.money - 40),
+        stress: Math.min(100, state.stress + 5),
+        health: Math.min(100, state.health + 40),
+        lastAction: { building: "hospital", ts: Date.now() },
+      };
+
+      if (erVisits === 2) {
+        next = applyRisk(next, "ER_VISIT");
+      }
+
+      next.banner = {
+        tone: "neutral",
+        title: "Treated",
+        body: "The ER patches you up. It cost most of the day and money you didn't have to spare, but you're steady again.",
+      };
+
+      next = advanceDay(next);
+      next.screen = "map";
+      return settle(next);
+    }
+
+    case "HOSPITAL_IGNORE": {
+      let next = {
+        ...state,
+        health: Math.max(0, state.health - 25),
+        stress: Math.min(100, state.stress + 15),
+        lastAction: { building: "hospital", ts: Date.now() },
+      };
+      next = applyRisk(next, "MISSED_APPOINTMENT");
+      next.banner = {
+        tone: "bad",
+        title: "Pushed Through It",
+        body: "You go to work sick instead. By afternoon you're too wiped out to make your appointment.",
+      };
 
       next = advanceDay(next);
       next.screen = "map";

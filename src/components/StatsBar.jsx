@@ -21,6 +21,12 @@ export default function StatsBar() {
           </div>
         </div>
         <div className="stat">
+          <span className="stat-label">Health</span>
+          <div className="meter">
+            <div className="meter-fill" style={{ width: `${state.health}%` }} />
+          </div>
+        </div>
+        <div className="stat">
           <span className="stat-label">Housing</span>
           <span className="stat-value stat-tag">{state.housingStability}</span>
         </div>

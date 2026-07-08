@@ -3,7 +3,7 @@ import { useGame, RENT_DUE_DAY } from "../game/state";
 import NetworkMap from "../components/NetworkMap";
 
 const BUILDINGS = [
-  { id: "hospital", label: "Hospital", area: "hospital", active: false },
+  { id: "hospital", label: "Hospital", area: "hospital", active: true },
   { id: "school", label: "School", area: "school", active: false },
   { id: "hub", label: "Government Hub", area: "hub", active: false },
   { id: "food", label: "Food Office", area: "food", active: true },

@@ -1,7 +1,7 @@
 import { FLAG_THRESHOLD } from "./risk";
 
 export function resolveEnding(state) {
-  const { riskScore, flags, money } = state;
+  const { riskScore, flags, money, health } = state;
 
   if (money <= 0) {
     return {
@@ -27,11 +27,20 @@ export function resolveEnding(state) {
     };
   }
 
+  const lines = ["Rent is covered.", "The fridge isn't empty."];
+  if (flags.jobSecured) {
+    lines.push("You start the new job next week — one fewer form to fill out, for now.");
+  }
+  if (health <= 40) {
+    lines.push("You're still worn down from pushing through being sick, but you're upright.");
+  }
+  lines.push(
+    "For now, the paperwork worked the way it was supposed to — you just don't know why it worked this time, either."
+  );
+
   return {
     id: "stable",
     title: "Stable",
-    body: flags.jobSecured
-      ? "Rent is covered. The fridge isn't empty. You start the new job next week — one fewer form to fill out, for now. The paperwork worked the way it was supposed to; you still don't know why it worked this time."
-      : "Rent is covered. The fridge isn't empty. For now, the paperwork worked the way it was supposed to — you just don't know why it worked this time, either.",
+    body: lines.join(" "),
   };
 }
