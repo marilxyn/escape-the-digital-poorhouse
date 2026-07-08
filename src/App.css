@@ -260,6 +260,7 @@ h2 {
   position: relative;
   border: 3px solid var(--ink);
   padding: 20px 10px 16px;
+  min-height: 84px;
   background: var(--panel);
   color: var(--ink);
   cursor: pointer;
@@ -270,18 +271,36 @@ h2 {
   font-size: 14px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 4px;
   align-items: center;
   box-shadow: 4px 4px 0 var(--ink);
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.15s ease;
 }
 
-.building-hospital { grid-area: hospital; }
-.building-school { grid-area: school; }
-.building-hub { grid-area: hub; }
-.building-food { grid-area: food; }
-.building-housing { grid-area: housing; }
-.building-employment { grid-area: employment; }
+.building-hospital {
+  grid-area: hospital;
+}
+
+.building-school {
+  grid-area: school;
+}
+
+.building-hub {
+  grid-area: hub;
+}
+
+.building-food {
+  grid-area: food;
+}
+
+.building-housing {
+  grid-area: housing;
+}
+
+.building-employment {
+  grid-area: employment;
+}
 
 .building-active::before {
   content: "";
@@ -305,13 +324,11 @@ h2 {
   cursor: not-allowed;
   border-style: dashed;
   box-shadow: none;
-  background: repeating-linear-gradient(
-    135deg,
-    var(--panel),
-    var(--panel) 8px,
-    color-mix(in srgb, var(--ink) 8%, var(--panel)) 8px,
-    color-mix(in srgb, var(--ink) 8%, var(--panel)) 16px
-  );
+  background: repeating-linear-gradient(135deg,
+      var(--panel),
+      var(--panel) 8px,
+      color-mix(in srgb, var(--ink) 8%, var(--panel)) 8px,
+      color-mix(in srgb, var(--ink) 8%, var(--panel)) 16px);
 }
 
 .building-note {
@@ -445,12 +462,10 @@ h2 {
   text-align: left;
   font-family: var(--mono);
   font-size: 13px;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 17px,
-    color-mix(in srgb, var(--ink) 10%, transparent) 18px
-  );
+  background-image: repeating-linear-gradient(to bottom,
+      transparent,
+      transparent 17px,
+      color-mix(in srgb, var(--ink) 10%, transparent) 18px);
 }
 
 .document-selected {
@@ -712,20 +727,23 @@ h2 {
 .glitch-scanlines {
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.06) 0px,
-    rgba(255, 255, 255, 0.06) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+  background: repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px,
+      transparent 3px);
   animation: scanline-move 6s linear infinite;
   pointer-events: none;
 }
 
 @keyframes scanline-move {
-  from { background-position: 0 0; }
-  to { background-position: 0 120px; }
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 120px;
+  }
 }
 
 .glitch-flash {
@@ -736,10 +754,24 @@ h2 {
 }
 
 @keyframes glitch-flash-anim {
-  0%, 6%, 37.5%, 71.5%, 100% { opacity: 0; }
-  4% { opacity: 0.08; background: #fff; }
-  37% { opacity: 0.06; background: #2ee6ff; }
-  71% { opacity: 0.1; background: #ff2e6e; }
+  0%, 6%, 37.5%, 71.5%, 100% {
+    opacity: 0;
+  }
+
+  4% {
+    opacity: 0.08;
+    background: #fff;
+  }
+
+  37% {
+    opacity: 0.06;
+    background: #2ee6ff;
+  }
+
+  71% {
+    opacity: 0.1;
+    background: #ff2e6e;
+  }
 }
 
 .glitch-lines {
@@ -766,10 +798,21 @@ h2 {
 }
 
 @keyframes glitch-jitter {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-1px, 1px); }
-  50% { transform: translate(1px, -1px); }
-  75% { transform: translate(-1px, -1px); }
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(-1px, 1px);
+  }
+
+  50% {
+    transform: translate(1px, -1px);
+  }
+
+  75% {
+    transform: translate(-1px, -1px);
+  }
 }
 
 .glitch-skip {
@@ -807,13 +850,11 @@ h2 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.03) 0px,
-    rgba(255, 255, 255, 0.03) 1px,
-    transparent 1px,
-    transparent 3px
-  );
+  background: repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.03) 0px,
+      rgba(255, 255, 255, 0.03) 1px,
+      transparent 1px,
+      transparent 3px);
   mix-blend-mode: screen;
 }
 
@@ -835,10 +876,12 @@ h2 {
 }
 
 @keyframes profile-glow-pulse {
+
   0%,
   100% {
     filter: drop-shadow(0 0 6px color-mix(in srgb, var(--net-line) 55%, transparent));
   }
+
   50% {
     filter: drop-shadow(0 0 18px color-mix(in srgb, var(--net-line) 85%, transparent));
   }
@@ -945,7 +988,9 @@ h2 {
 }
 
 @keyframes dash-flow {
-  to { stroke-dashoffset: -6.8; }
+  to {
+    stroke-dashoffset: -6.8;
+  }
 }
 
 .hub-glow {
@@ -955,8 +1000,15 @@ h2 {
 }
 
 @keyframes hub-pulse {
-  0%, 100% { r: 9; opacity: 0.55; }
-  50% { r: 13; opacity: 0.15; }
+  0%, 100% {
+    r: 9;
+    opacity: 0.55;
+  }
+
+  50% {
+    r: 13;
+    opacity: 0.15;
+  }
 }
 
 .hub-core {
