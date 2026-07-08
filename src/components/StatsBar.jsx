@@ -4,7 +4,7 @@ import { timeLabel } from "../game/state";
 export default function StatsBar() {
   const { state } = useGame();
   return (
-    <div className="stats-bar case-corners">
+    <div className={`stats-bar case-corners ${state.revealed ? "cyber" : ""}`}>
       <div className="form-header">
         <span>Form 12-B // Applicant Profile</span>
         <span>Case No. 4471-B</span>

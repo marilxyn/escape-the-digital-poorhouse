@@ -19,7 +19,7 @@ export default function MapScreen() {
 
   return (
     <motion.div
-      className={`screen map-screen case-corners ${state.revealed ? "map-screen-revealed" : ""}`}
+      className={`screen map-screen case-corners ${state.revealed ? "cyber" : ""}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

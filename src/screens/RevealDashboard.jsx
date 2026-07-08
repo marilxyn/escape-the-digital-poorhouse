@@ -11,7 +11,7 @@ export default function RevealDashboard() {
 
   return (
     <motion.div
-      className="screen reveal-screen case-corners"
+      className="screen reveal-screen case-corners cyber"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
