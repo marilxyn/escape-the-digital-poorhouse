@@ -7,7 +7,7 @@ export default function EndingScreen() {
 
   return (
     <motion.div
-      className={`screen ending-screen ending-${ending.id}`}
+      className={`screen ending-screen case-corners ending-${ending.id}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

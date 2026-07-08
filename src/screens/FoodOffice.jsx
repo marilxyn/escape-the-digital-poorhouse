@@ -41,7 +41,7 @@ export default function FoodOffice() {
 
   return (
     <motion.div
-      className="screen office-screen"
+      className="screen office-screen case-corners"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

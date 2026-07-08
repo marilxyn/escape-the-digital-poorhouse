@@ -5,7 +5,7 @@ export default function IntroScreen() {
   const { dispatch } = useGame();
   return (
     <motion.div
-      className="screen intro-screen"
+      className="screen intro-screen case-corners"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

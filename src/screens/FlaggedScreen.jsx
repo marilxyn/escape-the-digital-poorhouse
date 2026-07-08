@@ -5,7 +5,7 @@ export default function FlaggedScreen() {
   const { dispatch } = useGame();
   return (
     <motion.div
-      className="screen flagged-screen"
+      className="screen flagged-screen case-corners"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

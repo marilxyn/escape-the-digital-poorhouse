@@ -1,7 +1,8 @@
 :root {
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-  font: 17px/145% var(--sans);
+  --display: "Archivo Black", "Arial Black", sans-serif;
+  --sans: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  font: 16px/1.5 var(--sans);
   color-scheme: light;
 }
 
@@ -20,8 +21,10 @@ body {
 h1,
 h2,
 h3 {
-  font-weight: 600;
+  font-family: var(--display);
+  font-weight: 400;
   margin: 0 0 12px;
+  text-transform: uppercase;
 }
 
 p {

@@ -11,7 +11,7 @@ export default function RevealDashboard() {
 
   return (
     <motion.div
-      className="screen reveal-screen"
+      className="screen reveal-screen case-corners"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -27,6 +27,7 @@ export default function RevealDashboard() {
           {Object.entries(grouped).map(([reason, amount]) => (
             <li key={reason}>
               <span>{reason}</span>
+              <span className="reveal-leader" />
               <span className="reveal-amount">+{amount}</span>
             </li>
           ))}

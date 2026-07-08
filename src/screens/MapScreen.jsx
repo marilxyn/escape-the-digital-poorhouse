@@ -15,7 +15,7 @@ export default function MapScreen() {
 
   return (
     <motion.div
-      className="screen map-screen"
+      className="screen map-screen case-corners"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
