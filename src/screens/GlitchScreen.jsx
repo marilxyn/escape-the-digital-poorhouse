@@ -4,14 +4,16 @@ import { useGame } from "../game/state";
 
 const LINES = [
   "SYSTEM ERROR",
+  "CONNECTION INTERRUPTED",
   "RECALIBRATING INTERFACE...",
   "YOU ARE VIEWING: CITIZEN RECORD #4471-B",
   "HOUSING ↔ FOOD ↔ EMPLOYMENT ↔ HOSPITAL",
   "ALL AGENCIES REPORT TO THE SAME DATABASE",
+  "THIS IS THE SYSTEM THAT HAS BEEN WATCHING YOU",
 ];
 
-const LINE_INTERVAL = 650;
-const HOLD_AFTER_LAST = 900;
+const LINE_INTERVAL = 1000;
+const HOLD_AFTER_LAST = 2000;
 
 export default function GlitchScreen() {
   const { dispatch } = useGame();

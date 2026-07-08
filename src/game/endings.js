@@ -30,6 +30,8 @@ export function resolveEnding(state) {
   return {
     id: "stable",
     title: "Stable",
-    body: "Rent is covered. The fridge isn't empty. For now, the paperwork worked the way it was supposed to — you just don't know why it worked this time, either.",
+    body: flags.jobSecured
+      ? "Rent is covered. The fridge isn't empty. You start the new job next week — one fewer form to fill out, for now. The paperwork worked the way it was supposed to; you still don't know why it worked this time."
+      : "Rent is covered. The fridge isn't empty. For now, the paperwork worked the way it was supposed to — you just don't know why it worked this time, either.",
   };
 }

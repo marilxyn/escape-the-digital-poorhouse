@@ -4,9 +4,9 @@ import { isCorrectSelection } from "./documents";
 import { resolveEnding } from "./endings";
 
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-export const RENT_DUE_DAY = 6;
+export const RENT_DUE_DAY = 8;
 export const DAILY_COST_OF_LIVING = 15;
-export const REVEAL_AFTER_VISITS = 2;
+export const REVEAL_DAY = 4;
 
 export function timeLabel(day) {
   return `${WEEKDAYS[(day - 1) % 7]}, Day ${day}`;
@@ -21,7 +21,6 @@ const initialState = {
   housingStability: "at-risk",
   riskScore: 0,
   revealed: false,
-  visitCount: 0,
   lastAction: null,
   truth: { receivedUnemployment: false },
   flags: {
@@ -30,6 +29,10 @@ const initialState = {
     foodApproved: false,
     foodAttempts: 0,
     flaggedShown: false,
+    employmentApplications: 0,
+    interviewPending: false,
+    interviewResolved: false,
+    jobSecured: false,
   },
   log: [],
   banner: null,
@@ -50,7 +53,7 @@ function checkFlagEvent(state) {
 }
 
 function checkReveal(state) {
-  if (!state.revealed && state.visitCount >= REVEAL_AFTER_VISITS) {
+  if (!state.revealed && state.day >= REVEAL_DAY) {
     return { ...state, revealed: true, screen: "glitch" };
   }
   return state;
@@ -72,6 +75,9 @@ function settle(state) {
 }
 
 function reducer(state, action) {
+  if (state.screen === "ending" && action.type !== "CONTINUE_FROM_ENDING") return state;
+  if (state.screen === "reveal") return state;
+
   switch (action.type) {
     case "START_GAME":
       return { ...state, screen: "map" };
@@ -96,7 +102,6 @@ function reducer(state, action) {
         ...state,
         flags: { ...state.flags, housingSubmitted: true, housingAnswer: action.answer },
         housingStability: "pending",
-        visitCount: state.visitCount + 1,
         lastAction: { building: "housing", ts: Date.now() },
       };
       const liedAboutUnemployment =
@@ -120,7 +125,6 @@ function reducer(state, action) {
       let next = {
         ...state,
         flags: { ...state.flags, foodAttempts: attempts },
-        visitCount: state.visitCount + 1,
         lastAction: { building: "food", ts: Date.now() },
       };
 
@@ -142,6 +146,63 @@ function reducer(state, action) {
           tone: "bad",
           title: "Application Denied",
           body: "Documentation incomplete. Come back tomorrow with the correct paperwork.",
+        };
+      }
+
+      next = advanceDay(next);
+      next.screen = "map";
+      return settle(next);
+    }
+
+    case "EMPLOYMENT_APPLY": {
+      const applications = state.flags.employmentApplications + 1;
+      let next = {
+        ...state,
+        flags: { ...state.flags, employmentApplications: applications },
+        lastAction: { building: "employment", ts: Date.now() },
+      };
+
+      if (applications >= 2 && !state.flags.interviewResolved) {
+        next.flags = { ...next.flags, interviewPending: true };
+        next.banner = {
+          tone: "neutral",
+          title: "Interview Scheduled",
+          body: "A warehouse wants to interview you — Thursday, 2pm. Your benefits review appointment is the same day, same time.",
+        };
+      } else {
+        next.banner = {
+          tone: "neutral",
+          title: "Application Submitted",
+          body: "Your job application has been received. No word yet.",
+        };
+      }
+
+      next = advanceDay(next);
+      next.screen = "map";
+      return settle(next);
+    }
+
+    case "EMPLOYMENT_RESOLVE_CONFLICT": {
+      let next = {
+        ...state,
+        flags: { ...state.flags, interviewResolved: true, interviewPending: false },
+        lastAction: { building: "employment", ts: Date.now() },
+      };
+
+      if (action.choice === "interview") {
+        next.flags = { ...next.flags, jobSecured: true };
+        next = applyRisk(next, "MISSED_APPOINTMENT");
+        next.banner = {
+          tone: "good",
+          title: "Interview Attended",
+          body: "The interview went well — you'll likely be hired. Your benefits review appointment went unattended.",
+        };
+      } else {
+        next.flags = { ...next.flags, jobSecured: false };
+        next.banner = {
+          tone: "bad",
+          title: "Interview Missed",
+          body: "You kept your benefits appointment instead. The employer filled the position with someone who showed up.",
         };
       }
 

@@ -8,7 +8,7 @@ const BUILDINGS = [
   { id: "hub", label: "Government Hub", area: "hub", active: false },
   { id: "food", label: "Food Office", area: "food", active: true },
   { id: "housing", label: "Housing Office", area: "housing", active: true },
-  { id: "employment", label: "Employment Center", area: "employment", active: false },
+  { id: "employment", label: "Employment Center", area: "employment", active: true },
 ];
 
 export default function MapScreen() {
@@ -31,7 +31,7 @@ export default function MapScreen() {
       <p className="map-hint">
         {state.revealed
           ? "Live feed: Citizen Record #4471-B. Every office reports to the same database."
-          : "Rent is due at the start of Day 6. Choose where to go."}
+          : "Rent is due at the start of Day 8. Choose where to go."}
       </p>
 
       {state.revealed ? (
