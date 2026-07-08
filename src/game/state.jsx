@@ -185,7 +185,7 @@ function reducer(state, action) {
         next.banner = {
           tone: "neutral",
           title: "Application Submitted",
-          body: "Your job application has been received. No word yet.",
+          body: "Your job application has been received. No word yet — one application rarely is enough. Consider applying to another opening.",
         };
       }
 

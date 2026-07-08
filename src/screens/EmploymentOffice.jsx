@@ -48,8 +48,15 @@ export default function EmploymentOffice() {
       ) : (
         <>
           <p className="office-flavor">
-            "Fill out an application. Doesn't guarantee anything, but it's something."
+            {state.flags.employmentApplications > 0
+              ? "\"One application on file isn't enough to get a call back. Apply to another opening.\""
+              : "\"Fill out an application. Doesn't guarantee anything, but it's something.\""}
           </p>
+          {state.flags.employmentApplications > 0 && (
+            <p className="office-note">
+              Applications submitted so far: {state.flags.employmentApplications}
+            </p>
+          )}
           <div className="form-question">Pick a posting</div>
           <div className="form-options">
             {Object.values(JOBS).map((job) => (
