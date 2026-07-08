@@ -13,6 +13,7 @@ export default function EndingScreen() {
       exit={{ opacity: 0 }}
     >
       <h2>{ending.title}</h2>
+      <p className="ending-reason">{ending.reason}</p>
       <p className="ending-body">{ending.body}</p>
       <button className="btn btn-primary" onClick={() => dispatch({ type: "CONTINUE_FROM_ENDING" })}>
         See Your Profile

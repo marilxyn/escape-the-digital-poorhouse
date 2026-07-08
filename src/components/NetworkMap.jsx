@@ -4,14 +4,17 @@ import { HUB, NETWORK_NODES } from "../game/network";
 
 export default function NetworkMap() {
   const { state, dispatch } = useGame();
+  const nodes = NETWORK_NODES.map((n) =>
+    n.id === "hospital" ? { ...n, active: state.flags.jobSecured } : n
+  );
   const pulseNode = state.lastAction
-    ? NETWORK_NODES.find((n) => n.id === state.lastAction.building)
+    ? nodes.find((n) => n.id === state.lastAction.building)
     : null;
 
   return (
     <div className="network-map">
       <svg className="network-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        {NETWORK_NODES.map((node) => (
+        {nodes.map((node) => (
           <line
             key={node.id}
             x1={HUB.x}
@@ -39,7 +42,7 @@ export default function NetworkMap() {
         DATABASE
       </div>
 
-      {NETWORK_NODES.map((node) => (
+      {nodes.map((node) => (
         <button
           key={node.id}
           className={`network-node ${node.active ? "network-node-active" : "network-node-dormant"}`}

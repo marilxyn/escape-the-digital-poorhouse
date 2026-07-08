@@ -12,7 +12,9 @@ export default function StatsBar() {
       <div className="stats-grid">
         <div className="stat">
           <span className="stat-label">Money</span>
-          <span className="stat-value">${state.money}</span>
+          <span className={`stat-value ${state.money < 0 ? "stat-negative" : ""}`}>
+            {state.money < 0 ? `-$${Math.abs(state.money)}` : `$${state.money}`}
+          </span>
         </div>
         <div className="stat">
           <span className="stat-label">Food</span>

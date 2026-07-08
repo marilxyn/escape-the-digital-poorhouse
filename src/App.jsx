@@ -8,6 +8,7 @@ import HousingOffice from "./screens/HousingOffice";
 import FoodOffice from "./screens/FoodOffice";
 import EmploymentOffice from "./screens/EmploymentOffice";
 import HospitalOffice from "./screens/HospitalOffice";
+import InjuryScreen from "./screens/InjuryScreen";
 import FlaggedScreen from "./screens/FlaggedScreen";
 import GlitchScreen from "./screens/GlitchScreen";
 import EndingScreen from "./screens/EndingScreen";
@@ -21,6 +22,7 @@ const SCREENS = {
   food: FoodOffice,
   employment: EmploymentOffice,
   hospital: HospitalOffice,
+  injury: InjuryScreen,
   flagged: FlaggedScreen,
   glitch: GlitchScreen,
   ending: EndingScreen,

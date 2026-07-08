@@ -2,6 +2,7 @@ import { createContext, useContext, useReducer } from "react";
 import { applyRisk, FLAG_THRESHOLD } from "./risk";
 import { isCorrectSelection } from "./documents";
 import { resolveEnding } from "./endings";
+import { getJob } from "./jobs";
 
 const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 export const RENT_DUE_DAY = 8;
@@ -31,10 +32,12 @@ const initialState = {
     foodAttempts: 0,
     flaggedShown: false,
     employmentApplications: 0,
+    postingType: null,
     interviewPending: false,
     interviewResolved: false,
     jobSecured: false,
-    erVisits: 0,
+    injuryOccurred: false,
+    injuryDebt: 0,
   },
   log: [],
   banner: null,
@@ -43,7 +46,11 @@ const initialState = {
 
 function advanceDay(state) {
   let next = { ...state, day: state.day + 1 };
-  next.money = Math.max(0, next.money - DAILY_COST_OF_LIVING);
+  let money = next.money - DAILY_COST_OF_LIVING;
+  if (next.flags.jobSecured && next.flags.postingType) {
+    money += getJob(next.flags.postingType).wagePerDay;
+  }
+  next.money = money;
   return next;
 }
 
@@ -160,7 +167,7 @@ function reducer(state, action) {
       const applications = state.flags.employmentApplications + 1;
       let next = {
         ...state,
-        flags: { ...state.flags, employmentApplications: applications },
+        flags: { ...state.flags, employmentApplications: applications, postingType: action.posting },
         lastAction: { building: "employment", ts: Date.now() },
       };
 
@@ -169,7 +176,7 @@ function reducer(state, action) {
         next.banner = {
           tone: "neutral",
           title: "Interview Scheduled",
-          body: "A warehouse wants to interview you — Thursday, 2pm. Your benefits review appointment is the same day, same time.",
+          body: "An employer wants to interview you — Thursday, 2pm. Your benefits review appointment is the same day, same time.",
         };
       } else {
         next.banner = {
@@ -197,63 +204,41 @@ function reducer(state, action) {
         next.banner = {
           tone: "good",
           title: "Interview Attended",
-          body: "The interview went well — you'll likely be hired. Your benefits review appointment went unattended.",
+          body: "The interview went well — you're hired. Your benefits review appointment went unattended.",
         };
-      } else {
-        next.flags = { ...next.flags, jobSecured: false };
-        next.banner = {
-          tone: "bad",
-          title: "Interview Missed",
-          body: "You kept your benefits appointment instead. The employer filled the position with someone who showed up.",
-        };
+        next = advanceDay(next);
+        // First day on the job cuts straight to the injury event, unconditionally.
+        next.screen = "injury";
+        return next;
       }
 
-      next = advanceDay(next);
-      next.screen = "map";
-      return settle(next);
-    }
-
-    case "HOSPITAL_ER": {
-      const erVisits = state.flags.erVisits + 1;
-      let next = {
-        ...state,
-        flags: { ...state.flags, erVisits },
-        money: Math.max(0, state.money - 40),
-        stress: Math.min(100, state.stress + 5),
-        health: Math.min(100, state.health + 40),
-        lastAction: { building: "hospital", ts: Date.now() },
-      };
-
-      if (erVisits === 2) {
-        next = applyRisk(next, "ER_VISIT");
-      }
-
-      next.banner = {
-        tone: "neutral",
-        title: "Treated",
-        body: "The ER patches you up. It cost most of the day and money you didn't have to spare, but you're steady again.",
-      };
-
-      next = advanceDay(next);
-      next.screen = "map";
-      return settle(next);
-    }
-
-    case "HOSPITAL_IGNORE": {
-      let next = {
-        ...state,
-        health: Math.max(0, state.health - 25),
-        stress: Math.min(100, state.stress + 15),
-        lastAction: { building: "hospital", ts: Date.now() },
-      };
-      next = applyRisk(next, "MISSED_APPOINTMENT");
+      next.flags = { ...next.flags, jobSecured: false };
       next.banner = {
         tone: "bad",
-        title: "Pushed Through It",
-        body: "You go to work sick instead. By afternoon you're too wiped out to make your appointment.",
+        title: "Interview Missed",
+        body: "You kept your benefits appointment instead. The employer filled the position with someone who showed up.",
       };
-
       next = advanceDay(next);
+      next.screen = "map";
+      return settle(next);
+    }
+
+    case "ACK_INJURY": {
+      const job = getJob(state.flags.postingType);
+      let next = {
+        ...state,
+        flags: { ...state.flags, injuryOccurred: true, injuryDebt: job.injury.cost },
+        money: state.money - job.injury.cost,
+        health: Math.max(0, state.health - job.injury.healthLoss),
+        stress: Math.min(100, state.stress + job.injury.stressGain),
+        lastAction: { building: "hospital", ts: Date.now() },
+      };
+      next = applyRisk(next, "ER_VISIT");
+      next.banner = {
+        tone: "bad",
+        title: "Treated",
+        body: `The ER patches you up, but it isn't free. You're now carrying $${job.injury.cost} in medical debt on top of everything else.`,
+      };
       next.screen = "map";
       return settle(next);
     }

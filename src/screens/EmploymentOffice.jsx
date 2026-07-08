@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useGame } from "../game/state";
-
-const POSTINGS = [
-  { id: "warehouse", label: "Warehouse Associate — $14/hr" },
-  { id: "cashier", label: "Retail Cashier — $13.50/hr" },
-  { id: "driver", label: "Delivery Driver — $15/hr" },
-];
+import { JOBS } from "../game/jobs";
 
 export default function EmploymentOffice() {
   const { state, dispatch } = useGame();
   const [posting, setPosting] = useState(null);
-  const { interviewPending, interviewResolved } = state.flags;
+  const { interviewPending, interviewResolved, jobSecured, injuryOccurred } = state.flags;
 
   return (
     <motion.div
@@ -44,8 +39,10 @@ export default function EmploymentOffice() {
         </>
       ) : interviewResolved ? (
         <p>
-          {state.flags.jobSecured
-            ? "You start next week. There is nothing more to do here today."
+          {jobSecured
+            ? injuryOccurred
+              ? "You're still working there, medical debt and all. There is nothing more to do here today."
+              : "You start next week. There is nothing more to do here today."
             : "No new leads today. There is nothing more to do here today."}
         </p>
       ) : (
@@ -55,25 +52,25 @@ export default function EmploymentOffice() {
           </p>
           <div className="form-question">Pick a posting</div>
           <div className="form-options">
-            {POSTINGS.map((p) => (
+            {Object.values(JOBS).map((job) => (
               <label
-                key={p.id}
-                className={`radio ${posting === p.id ? "radio-selected" : ""}`}
+                key={job.id}
+                className={`radio ${posting === job.id ? "radio-selected" : ""}`}
               >
                 <input
                   type="radio"
                   name="posting"
-                  checked={posting === p.id}
-                  onChange={() => setPosting(p.id)}
+                  checked={posting === job.id}
+                  onChange={() => setPosting(job.id)}
                 />
-                {p.label}
+                {job.label}
               </label>
             ))}
           </div>
           <button
             className="btn btn-primary"
             disabled={!posting}
-            onClick={() => dispatch({ type: "EMPLOYMENT_APPLY" })}
+            onClick={() => dispatch({ type: "EMPLOYMENT_APPLY", posting })}
           >
             Submit Application
           </button>

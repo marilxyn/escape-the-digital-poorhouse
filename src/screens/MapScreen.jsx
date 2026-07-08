@@ -3,7 +3,7 @@ import { useGame, RENT_DUE_DAY } from "../game/state";
 import NetworkMap from "../components/NetworkMap";
 
 const BUILDINGS = [
-  { id: "hospital", label: "Hospital", area: "hospital", active: true },
+  { id: "hospital", label: "Hospital", area: "hospital", active: false, lockedNote: "Opens after employment" },
   { id: "school", label: "School", area: "school", active: false },
   { id: "hub", label: "Government Hub", area: "hub", active: false },
   { id: "food", label: "Food Office", area: "food", active: true },
@@ -13,6 +13,9 @@ const BUILDINGS = [
 
 export default function MapScreen() {
   const { state, dispatch } = useGame();
+  const buildings = BUILDINGS.map((b) =>
+    b.id === "hospital" ? { ...b, active: state.flags.jobSecured } : b
+  );
 
   return (
     <motion.div
@@ -38,7 +41,7 @@ export default function MapScreen() {
         <NetworkMap />
       ) : (
         <div className="city-map">
-          {BUILDINGS.map((b) => (
+          {buildings.map((b) => (
             <button
               key={b.id}
               className={`building building-${b.area} ${b.active ? "building-active" : "building-disabled"}`}
@@ -46,7 +49,7 @@ export default function MapScreen() {
               onClick={() => b.active && dispatch({ type: "VISIT", building: b.id })}
             >
               {b.label}
-              {!b.active && <span className="building-note">Not yet open</span>}
+              {!b.active && <span className="building-note">{b.lockedNote ?? "Not yet open"}</span>}
             </button>
           ))}
         </div>
