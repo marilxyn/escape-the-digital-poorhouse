@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useGame } from "../game/state";
+import SystemDocs from "../components/SystemDocs";
 
 export default function RevealDashboard() {
   const { state } = useGame();
@@ -38,6 +39,8 @@ export default function RevealDashboard() {
         None of these looked bad on their own. Together, they were the whole decision — made by
         a system no office ever admitted was watching.
       </p>
+
+      <SystemDocs />
     </motion.div>
   );
 }

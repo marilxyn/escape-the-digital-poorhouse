@@ -623,6 +623,58 @@ h2 {
   font-size: 13px;
 }
 
+.system-docs {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  text-align: left;
+}
+
+.system-docs-header {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--net-line, inherit);
+  margin-bottom: 14px;
+  opacity: 0.9;
+}
+
+.system-docs-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.system-docs-list li {
+  font-size: 12px;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.system-docs-list .prompt {
+  color: var(--net-line, inherit);
+  font-weight: 700;
+}
+
+.system-docs-credit {
+  font-size: 11px;
+  line-height: 1.7;
+  opacity: 0.65;
+}
+
+.system-docs-credit a {
+  color: var(--net-line, inherit);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.system-docs-credit a:hover {
+  opacity: 0.8;
+}
+
 .cyber .reveal-score {
   border-color: var(--net-line);
   color: var(--net-line);
