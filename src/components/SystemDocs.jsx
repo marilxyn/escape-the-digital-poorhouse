@@ -6,6 +6,29 @@ const FACTS = [
   "Being poor generates more data than being wealthy: more agencies, more forms, more contact points — which means more opportunities for a system to flag you.",
 ];
 
+const ARTICLES = [
+  {
+    title: "What happened when states turned their public benefits systems over to AI",
+    source: "Fast Company",
+    url: "https://www.fastcompany.com/91265363/states-are-turning-their-public-benefits-systems-over-to-ai-the-results-have-often-led-to-immense-suffering",
+  },
+  {
+    title: "Thousands of Michiganders falsely accused of unemployment fraud get $20M settlement",
+    source: "Michigan Advance",
+    url: "https://michiganadvance.com/briefs/thousands-of-michiganders-falsely-accused-of-unemployment-fraud-get-20m-settlement/",
+  },
+  {
+    title: "AP report: DOJ examining AI screening tool used by Pa. child welfare agency",
+    source: "PBS NewsHour / AP",
+    url: "https://www.pbs.org/newshour/nation/ap-report-doj-examining-ai-screening-tool-used-by-pa-child-welfare-agency",
+  },
+  {
+    title: "DWP 'fairness analysis' reveals bias in AI fraud detection system",
+    source: "Computer Weekly",
+    url: "https://www.computerweekly.com/news/366616983/DWP-fairness-analysis-reveals-bias-in-AI-fraud-detection-system",
+  },
+];
+
 export default function SystemDocs() {
   return (
     <div className="system-docs">
@@ -30,6 +53,18 @@ export default function SystemDocs() {
         <em>Automating Inequality</em>. The agencies, risk score, and hidden database in this
         game are fiction — the systems they're modeled on are not.
       </p>
+
+      <div className="system-docs-header">// Related Articles</div>
+      <ul className="related-articles">
+        {ARTICLES.map((article) => (
+          <li key={article.url}>
+            <a href={article.url} target="_blank" rel="noopener noreferrer">
+              {article.title}
+            </a>
+            <span className="related-source">{article.source}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
